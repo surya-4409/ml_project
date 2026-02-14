@@ -10,7 +10,8 @@ app = Flask(__name__)
 # Configuration
 TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "file:./experiments")
 MODEL_NAME = os.getenv("MODEL_NAME", "ClassificationModel")
-MODEL_VERSION = os.getenv("MODEL_VERSION", "3")
+# CHANGED: Default to version 6 to ensure the correct Linux-trained model loads
+MODEL_VERSION = os.getenv("MODEL_VERSION", "6")
 
 # Global variables
 model = None

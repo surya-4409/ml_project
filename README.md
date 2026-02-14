@@ -4,6 +4,25 @@
 ## 📌 Project Overview
 This project implements a production-ready Machine Learning Operations (MLOps) pipeline for classifying breast cancer tumors. It leverages **Docker** for containerization, **MLflow** for experiment tracking and model management, and **Flask** for serving real-time predictions.
 
+## 🏗️ System Architecture
+
+The project follows a decoupled Microservices architecture:
+
+1.  **Training Service (`model_trainer.py`)**:
+    * Runs inside a Docker container for environment consistency.
+    * Fetches data, preprocesses it using `StandardScaler`, and trains a `RandomForestClassifier`.
+    * Logs artifacts (model binary, scaler, confusion matrix) to the **MLflow Tracking Server**.
+
+2.  **Model Registry (MLflow)**:
+    * Acts as the central source of truth.
+    * Stores versioned models (e.g., v1, v2, v6).
+    * Allows the API to dynamically fetch specific model versions without rebuilding the image.
+
+3.  **Inference Service (`inference_api.py`)**:
+    * A **Flask** REST API running on **Gunicorn**.
+    * Loads the production model (Version 6) and Scaler at startup.
+    * Exposes endpoints for `/health` checks and `/predict` requests.
+
 ## 🚀 Key Features
 * **Reproducible Environment:** Fully containerized training and inference services using Docker.
 * **Experiment Tracking:** Logs model parameters, metrics (Accuracy, F1-Score), and artifacts to an MLflow server.
@@ -146,5 +165,7 @@ If you encounter "Permission denied" errors when running tests or training, it i
 
 **Path Errors (Windows):**
 If Git Bash converts paths incorrectly (e.g., `C:/Program Files/Git/...`), prepend a double slash `//` to paths in your Docker commands.
+
+```
 
 ```
